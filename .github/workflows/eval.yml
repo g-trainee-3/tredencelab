@@ -2,9 +2,6 @@ name: Copilot Eval Gate
 
 on: [pull_request]
 
-permissions:
-  models: read
-
 jobs:
   eval:
     runs-on: ubuntu-latest
@@ -20,22 +17,21 @@ jobs:
         run: |
           test -n "$GITHUB_TOKEN" || (echo "GITHUB_TOKEN is not available" && exit 1)
 
-      - name: Run evals (with retry for transient 5xx)
+      - name: Run evals
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: promptfoo eval --output results.json
+
+      - name: Check pass rate
         run: |
-          set -euo pipefail
-          ATTEMPTS=3
-          for i in $(seq 1 $ATTEMPTS); do
-            echo "Eval attempt $i/$ATTEMPTS..."
-            if promptfoo eval --output results.json; then
-              echo "Eval succeeded."
-              exit 0
-            fi
-            if [ "$i" -lt "$ATTEMPTS" ]; then
-              echo "Eval failed (likely transient API issue). Retrying in 10s..."
-              sleep 10
-            fi
-          done
-          echo "Eval failed after $ATTEMPTS attempts."
-          exit 1
+          PASS=$(python3 -c "
+          import json
+          with open('results.json') as f:
+              d = json.load(f)
+          s = d['results']['stats']
+          rate = s['successes'] / s['total'] * 100
+          print(f'{rate:.1f}')
+          ")
+          echo "Eval pass rate: $PASS%"
+          python3 -c "exit(0 if float('$PASS') >= 80 else 1)" || \
+            (echo "BLOCKED: Pass rate $PASS% is below 80% threshold." && exit 1)
