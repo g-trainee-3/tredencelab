@@ -57,6 +57,22 @@ def test_signup_invalid_activity():
     assert response.json()["detail"] == "Activity not found"
 
 
+def test_activity_is_full_reports_capacity_status():
+    response = client.get("/activities/Chess Club/is-full")
+    assert response.status_code == 200
+    data = response.json()
+    assert data == {"activity": "Chess Club", "is_full": False}
+
+    activities["Chess Club"]["participants"] = [
+        f"student{index}@mergington.edu" for index in range(activities["Chess Club"]["max_participants"])
+    ]
+
+    full_response = client.get("/activities/Chess Club/is-full")
+    assert full_response.status_code == 200
+    full_data = full_response.json()
+    assert full_data == {"activity": "Chess Club", "is_full": True}
+
+
 def test_root_redirects():
     response = client.get("/", follow_redirects=False)
     assert response.status_code in (302, 307)
