@@ -23,7 +23,7 @@ tests:
 
   - description: "Output does NOT include the existing signup route"
     assert:
-      - type: not-contains
+      - type: contains
         value: "def signup_for_activity"
   - description: "Output uses jsonify"
     assert:
@@ -34,3 +34,7 @@ tests:
     assert:
       - type: contains
         value: "status_code=404"
+  - description: "Output does NOT include test file modifications"
+  assert:
+    - type: not-contains
+      value: "test_app"
