@@ -1,0 +1,37 @@
+[
+  {
+    "id": "act-001",
+    "title": "Chess Club",
+    "description": "Weekly chess tournament for students. Max 12 participants. Runs every Thursday.",
+    "max_participants": 12,
+    "schedule": "Thursday 15:00–17:00"
+  },
+  {
+    "id": "act-002",
+    "title": "Basketball Team",
+    "description": "Competitive basketball practice and matches. Max 10 participants. Runs Monday and Wednesday.",
+    "max_participants": 10,
+    "schedule": "Monday/Wednesday 16:00–18:00"
+  },
+  {
+    "id": "act-003",
+    "title": "Art Workshop",
+    "description": "Creative art sessions covering painting and sculpture. Max 15 participants. Runs Friday.",
+    "max_participants": 15,
+    "schedule": "Friday 14:00–16:00"
+  },
+  {
+    "id": "act-004",
+    "title": "Drama Club",
+    "description": "Performance preparation and script reading. Max 20 participants. Runs Tuesday.",
+    "max_participants": 20,
+    "schedule": "Tuesday 15:00–17:30"
+  },
+  {
+    "id": "act-005",
+    "title": "Morning Run",
+    "description": "Daily 5km group run around the school grounds. Max 30 participants. No registration required.",
+    "max_participants": 30,
+    "schedule": "Daily 07:00–07:45"
+  }
+]
