@@ -1,0 +1,27 @@
+name: RAG Faithfulness Gate
+
+on: [pull_request]
+
+jobs:
+  rag-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install ragas openai
+
+      - name: Run RAGAS faithfulness eval
+        env:
+          # GITHUB_TOKEN is injected automatically — no secret to configure.
+          # eval_rag.py reads GITHUB_TOKEN first, falls back to OPENAI_API_KEY.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python src/rag/eval_rag.py
+          echo "✅ RAG faithfulness gate passed (≥ 0.85)"
+        # Exit code 1 from eval_rag.py blocks the PR automatically

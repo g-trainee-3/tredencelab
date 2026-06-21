@@ -1,0 +1,21 @@
+name: Text2SQL Correctness Gate
+
+on: [pull_request]
+
+jobs:
+  sql-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Run SQL correctness eval
+        run: |
+          cd src/text2sql
+          python eval_sql.py
+          echo "✅ SQL correctness gate passed (≥ 90%)"
+        # Exit code 1 blocks the PR

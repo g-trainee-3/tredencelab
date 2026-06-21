@@ -7,13 +7,13 @@ prompts:
     Place the new route below signup_for_activity(). Use existing imports only; do not add new imports. Output only the new route + function.
 
 providers:
-  - id: github:openai/gpt-5-mini
+  - id: github:gpt-4o-mini
 
 tests:
 
   - description: "Output contains the correct function name"
     assert:
-      - type: not-contains
+      - type: contains
         value: "def get_activity"
 
   - description: "Output does NOT contain modification of get_activities"
